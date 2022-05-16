@@ -18,8 +18,9 @@ pipeline{
         stage('pushing image to dockerhub'){
             steps{
                 script{   
-                sh 'echo $DOCKERHUB_C_PSW | docker login -u $DOCKERHUB_C_USR --password-stdin'
-                sh "docker push ${IMAGE_NAME}"
+                docker.withRegistry('', env.DOCKER_C){
+                    dockerImage.push()
+                    }
                   
                 }
             }
