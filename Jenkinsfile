@@ -7,11 +7,6 @@ pipeline{
     }
     agent any
     stages{
-        stage('Cloning repo'){
-            steps{
-                git 'https://github.com/atharshah1/2048-game'
-            }
-        }
         stage('Building Image'){
             steps{
                 // using docker pipeline plugin
