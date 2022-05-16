@@ -31,10 +31,10 @@ metadata:
 spec:
   selector:
     app: game-2048
-    type: NodePort
+    
   ports:
   - name: http
+    type: NodePort
     port: 80
     targetPort: 80
-    nodePort: 31031
     protocol: TCP 
