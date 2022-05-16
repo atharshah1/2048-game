@@ -16,9 +16,9 @@ spec:
     spec:
       containers:
       - name: game-2048
-      image: mohammadathar/2048-game
-      ports:
-      - containerPort: 80
+        image: mohammadathar/2048-game
+        ports:
+         - containerPort: 80
 
 ---
 apiVersion: v1
