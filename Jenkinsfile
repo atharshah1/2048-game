@@ -20,7 +20,7 @@ pipeline{
                 script{   
                 sh 'echo $DOCKERHUB_C_PSW | docker login -u $DOCKERHUB_C_USR --password-stdin'
                 sh "docker push ${IMAGE_NAME}"
-                    }
+                  
                 }
             }
         }
