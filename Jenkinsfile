@@ -11,7 +11,7 @@ pipeline{
             steps{
                 // using docker pipeline plugin
                 script{
-                    sh "sudo docker build -t ${IMAGE_NAME} ."
+                    sh "docker build -t ${IMAGE_NAME} ."
                 }
             }
         }
