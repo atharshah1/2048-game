@@ -30,10 +30,10 @@ pipeline{
    steps{
     sshagent(['k8s-jenkins'])
     {
-     sh 'scp -r -o StrictHostKeyChecking=no 2048-deployment-service.yml ubuntu@34.203.246.129:$HOME/'
+     sh 'scp -r -o StrictHostKeyChecking=no 2048-deployment-service.yml ubuntu@34.203.246.129:/home/ubuntu/'
 script{
       try{
-       sh 'ssh ubuntu@34.203.246.129 kubectl apply -f $HOME/2048-deployment-service.yml --kubeconfig=/home/ubuntu/.kube/config'
+       sh 'ssh ubuntu@34.203.246.129 kubectl apply -f /home/ubuntu/2048-deployment-service.yml --kubeconfig=/home/ubuntu/.kube/config'
 }catch(error)
        {
 }
