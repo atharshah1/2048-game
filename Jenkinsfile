@@ -2,8 +2,8 @@ pipeline{
     environment{
         IMAGE_NAME="mohammadathar/2048-game"
         REPO_NAME="2048-game"
-        dockerImage='my docker'
-        DOCKER_C=credentials('docker_credentials')
+        dockerImage=''
+        DOCKER_C = 'docker_credentials'
     }
     agent any
     stages{
@@ -11,7 +11,7 @@ pipeline{
             steps{
                 // using docker pipeline plugin
                 script{
-                    sh "docker build -t ${IMAGE_NAME} ."
+                    dockerImage = docker.build env.IMAGE_NAME
                 }
             }
         }
