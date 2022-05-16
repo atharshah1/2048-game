@@ -3,7 +3,7 @@ pipeline{
         IMAGE_NAME="mohammadathar/2048-game"
         REPO_NAME="2048-game"
         dockerImage='my docker'
-        DOCKER_C='docker_credentials'
+        DOCKER_C=credentials('docker_credentials')
     }
     agent any
     stages{
@@ -11,15 +11,15 @@ pipeline{
             steps{
                 // using docker pipeline plugin
                 script{
-                    sh "docker build -t ${IMAGE_NAME} ."
+                    sh "sudo docker build -t ${IMAGE_NAME} ."
                 }
             }
         }
         stage('pushing image to dockerhub'){
             steps{
                 script{   
-                docker.withRegistry('', env.DOCKER_C){
-                    dockerImage.push()
+                sh 'echo $DOCKERHUB_C_PSW | docker login -u $DOCKERHUB_C_USR --password-stdin'
+                sh "docker push ${IMAGE_NAME}"
                     }
                 }
             }
