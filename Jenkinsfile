@@ -2,7 +2,7 @@ pipeline{
     environment{
         IMAGE_NAME="mohammadathar/2048-game"
         REPO_NAME="2048-game"
-        dockerImage=''
+        dockerImage='my docker'
         DOCKER_C='docker_credentials'
     }
     agent any
