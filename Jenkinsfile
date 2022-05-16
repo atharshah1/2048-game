@@ -11,7 +11,7 @@ pipeline{
             steps{
                 // using docker pipeline plugin
                 script{
-                    dockerImage = Docker.build("${IMAGE_NAME}", "./${REPO_NAME}/Dockerfile")
+                    sh "docker build -t ${IMAGE_NAME} ./$REPO_NAME/Dockerfile"
                 }
             }
         }
