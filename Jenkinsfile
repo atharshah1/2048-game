@@ -1,45 +1,23 @@
-pipeline{
-    environment{
-        IMAGE_NAME="mohammadathar/2048-game"
-        REPO_NAME="2048-game"
-        dockerImage=''
-        DOCKER_C = 'docker_credentials'
-    }
+pipeline {
     agent any
-    stages{
-        stage('Building Image'){
+    environment {
+        PROJECT_ID = 'telepain-md-stage'
+        CLUSTER_NAME = 'telepain-qa-cluster'
+        LOCATION = 'us-central1-a'
+        CREDENTIALS_ID = 'telepain-md-stage'
+    }
+    stages {
+        stage('GitHub') {
+      steps {
+        git 'https://github.com/atharshah1/2048-game.git'
+      }
+    }
+    
+        stage('Deploy to GKE') {
             steps{
-                // using docker pipeline plugin
-                script{
-                    dockerImage = docker.build env.IMAGE_NAME
-                }
+
+                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: '2048-deployment-service.yml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
             }
         }
-        stage('pushing image to dockerhub'){
-            steps{
-                script{   
-                docker.withRegistry('', env.DOCKER_C){
-                    dockerImage.push()
-                    }
-                  
-                }
-            }
-        }
-        stage('Deploy to K8s')
-  {
-   steps{
-    sshagent(['k8s-jenkins'])
-    {
-     sh 'scp -r -o StrictHostKeyChecking=no 2048-deployment-service.yml ubuntu@3.92.226.106:/home/ubuntu/'
-script{
-      try{
-       sh 'ssh ubuntu@3.92.226.106 kubectl apply -f /home/ubuntu/2048-deployment-service.yml --kubeconfig=/home/ubuntu/.kube/config'
-}catch(error)
-       {
-}
-     }
-    }
-   }
-  }
-    }
+    }    
 }
