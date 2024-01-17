@@ -1,23 +1,26 @@
 pipeline {
     agent any
-    environment {
-        PROJECT_ID = 'telepain-md-stage'
-        CLUSTER_NAME = 'telepain-qa-cluster'
-        LOCATION = 'us-central1-a'
-        CREDENTIALS_ID = 'telepain-md-stage'
-    }
     stages {
-        stage('GitHub') {
-      steps {
-        git 'https://github.com/atharshah1/2048-game.git'
-      }
-    }
-    
-        stage('Deploy to GKE') {
-            steps{
-
-                step([$class: 'KubernetesEngineBuilder', projectId: env.PROJECT_ID, clusterName: env.CLUSTER_NAME, location: env.LOCATION, manifestPattern: '2048-deployment-service.yml', credentialsId: env.CREDENTIALS_ID, verifyDeployments: true])
+        stage('Pull') {
+            steps {
+                sshagent(credentials: ['ssh-key']) {
+                    sh 'ssh ubuntu@52.23.224.169 "cd ~/app && git pull https://github.com/atharshah1/2048-game/"'
+                }
             }
         }
-    }    
+        stage('Build') {
+            steps {
+                sshagent(credentials: ['ssh-key']) {
+                    sh 'ssh ubuntu@52.23.224.169 "cd ~/app/2048-game/ && docker build -t app ."'
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                sshagent(credentials: ['ssh-key']) {
+                    sh 'ssh ubuntu@52.23.224.169 "cd ~/app/2048-game/ && docker run -p 80:80 -d app"'
+                }
+            }
+        }
+    }
 }
